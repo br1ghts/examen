@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import readline from "readline";
-
+import { loadState, saveState, getPaths } from "./core/state.js";
 const commands = {
   help: {
     desc: "show commands",
@@ -28,7 +28,35 @@ const commands = {
       console.log("shutting down examen...");
       rl.close();
     }
+  },
+  status: {
+  desc: "show system status",
+  run() {
+    const { STATE_FILE } = getPaths();
+    console.log("\nexamen status");
+    console.log(`  user:      ${state.user}`);
+    console.log(`  boots:     ${state.boots}`);
+    console.log(`  last_boot: ${state.last_boot}`);
+    console.log(`  state:     ${STATE_FILE}\n`);
   }
+},
+
+whoami: {
+  desc: "show current user identity",
+  run() {
+    console.log(`\n${state.user}\n`);
+  }
+},
+
+boot: {
+  desc: "show boot info",
+  run() {
+    console.log("\nboot sequence");
+    console.log(`  created_at: ${state.created_at}`);
+    console.log(`  last_boot:  ${state.last_boot}`);
+    console.log(`  boots:      ${state.boots}\n`);
+  }
+},
 };
 
 const rl = readline.createInterface({
@@ -40,6 +68,11 @@ const rl = readline.createInterface({
 console.clear();
 console.log("examen v0.0.1");
 console.log("type 'help' to begin\n");
+
+let state = loadState();
+state.last_boot = new Date().toISOString();
+state.boots += 1;
+saveState(state);
 
 rl.prompt();
 
