@@ -1,4 +1,4 @@
-import { spawn } from "child_process";
+import { spawn, spawnSync } from "child_process";
 import { getLauncherPaths, loadApps, saveApps } from "../storage.js";
 
 function usage() {
@@ -13,13 +13,29 @@ function usage() {
   console.log("  app edit\n");
 }
 
+
+function commandExists(cmd) {
+  const res = spawnSync("command", ["-v", cmd], { shell: true, stdio: "ignore" });
+  return res.status === 0;
+}
+
 function openInEditor(filePath) {
-  const editor = process.env.EDITOR;
+  const preferred = (process.env.EDITOR || "").trim();
+
+  const candidates = [
+    preferred,
+    "code", // VS Code CLI, if installed
+  ].filter(Boolean);
+
+  const editor = candidates.find(commandExists);
 
   if (editor) {
-    // Use EDITOR if set
-    const p = spawn(editor, [filePath], { stdio: "inherit" });
-    p.on("error", () => console.log(`failed to run EDITOR='${editor}'`));
+    const p = spawn(`${editor} "${filePath}"`, {
+      stdio: "inherit",
+      shell: true
+    });
+
+    p.on("error", () => console.log(`failed to run editor '${editor}'`));
     return;
   }
 
