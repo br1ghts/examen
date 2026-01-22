@@ -1,0 +1,24 @@
+{
+  "name": "examen",
+  "version": "1.0.0",
+  "description": "examen is a fake operating system that lives in the terminal. Not a framework. Not a productivity app. Not a dashboard.",
+  "main": "index.js",
+  "type": "module",
+  "bin": {
+    "examen": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/br1ghts/examen.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/br1ghts/examen/issues"
+  },
+  "homepage": "https://github.com/br1ghts/examen#readme"
+}
