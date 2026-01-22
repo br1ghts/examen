@@ -20,5 +20,13 @@
   "bugs": {
     "url": "https://github.com/br1ghts/examen/issues"
   },
-  "homepage": "https://github.com/br1ghts/examen#readme"
+  "homepage": "https://github.com/br1ghts/examen#readme",
+  "devDependencies": {
+    "fast-xml-parser": "^5.3.3"
+  },
+  "dependencies": {
+    "boxen": "^8.0.1",
+    "chalk": "^5.6.2",
+    "cli-table3": "^0.6.5"
+  }
 }

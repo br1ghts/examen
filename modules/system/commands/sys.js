@@ -13,7 +13,6 @@ const pkgPath = path.join(repoRoot, "package.json");
 function usage() {
   console.log("\nusage: sys <subcommand>\n");
   console.log("subcommands:");
-  console.log("  status   show system status");
   console.log("  paths    show examen paths");
   console.log("  modules  list loaded modules");
   console.log("  version  show version info");
@@ -23,7 +22,7 @@ function usage() {
 
 export default {
   name: "sys",
-  desc: "system commands: sys status|paths|modules|version|reset",
+  desc: "system commands: sys paths|modules|version|reset",
   run(args, rl, ctx) {
     const sub = (args[0] || "").toLowerCase();
 
@@ -59,20 +58,6 @@ export default {
       return;
     }
 
-    if (sub === "status") {
-      const { EXAMEN_DIR, STATE_FILE } = getPaths();
-      const mods = ctx.modulesLoaded || [];
-
-      console.log("\nsystem status");
-      console.log(`  user:            ${ctx.state.user}`);
-      console.log(`  boots:           ${ctx.state.boots}`);
-      console.log(`  last_boot:       ${ctx.state.last_boot}`);
-      console.log(`  commands_loaded: ${Object.keys(ctx.commands).length}`);
-      console.log(`  modules_loaded:  ${mods.length}`);
-      console.log(`  examen_dir:      ${EXAMEN_DIR}`);
-      console.log(`  state_file:      ${STATE_FILE}\n`);
-      return;
-    }
 
     if (sub === "reset") {
       const { STATE_FILE } = getPaths();
