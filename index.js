@@ -2,6 +2,35 @@
 
 import readline from "readline";
 
+const commands = {
+  help: {
+    desc: "show commands",
+    run() {
+      console.log("\ncommands:");
+      Object.keys(commands).forEach(cmd => {
+        console.log(`  ${cmd} - ${commands[cmd].desc}`);
+      });
+      console.log("");
+    }
+  },
+
+  exit: {
+    desc: "shutdown examen",
+    run(_, rl) {
+      console.log("shutting down examen...");
+      rl.close();
+    }
+  },
+
+  quit: {
+    desc: "alias for exit",
+    run(_, rl) {
+      console.log("shutting down examen...");
+      rl.close();
+    }
+  }
+};
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -9,7 +38,6 @@ const rl = readline.createInterface({
 });
 
 console.clear();
-console.log("Welcome to examen!");
 console.log("examen v0.0.1");
 console.log("type 'help' to begin\n");
 
@@ -17,27 +45,16 @@ rl.prompt();
 
 rl.on("line", (line) => {
   const input = line.trim();
+  if (!input) return rl.prompt();
 
-  if (!input) {
-    rl.prompt();
-    return;
+  const [cmd, ...args] = input.split(" ");
+
+  if (commands[cmd]) {
+    commands[cmd].run(args, rl);
+  } else {
+    console.log(`unknown command: ${cmd}`);
   }
 
-  if (input === "exit" || input === "quit") {
-    console.log("shutting down examen...");
-    rl.close();
-    return;
-  }
-
-  if (input === "help") {
-    console.log("\ncommands:");
-    console.log("  help  - show commands");
-    console.log("  exit  - shutdown examen\n");
-    rl.prompt();
-    return;
-  }
-
-  console.log(`unknown command: ${input}`);
   rl.prompt();
 });
 
