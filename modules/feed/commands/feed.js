@@ -2,7 +2,7 @@ import { spawn } from "child_process";
 import crypto from "crypto";
 import { loadFeeds, saveFeeds, loadItems, saveItems, getFeedPaths } from "../storage.js";
 import { parseFeedXml } from "../parse.js";
-import { table, cell, section, hint } from "../../../core/ui/index.js";
+import {table, cell, section, hint } from "../../../core/ui/index.js";
 
 function usage() {
   console.log("\nusage:");

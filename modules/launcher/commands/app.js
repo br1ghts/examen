@@ -15,7 +15,8 @@ function usage() {
 
 
 function commandExists(cmd) {
-  const res = spawnSync("command", ["-v", cmd], { shell: true, stdio: "ignore" });
+  const tool = process.platform === "win32" ? "where" : "which";
+  const res = spawnSync(tool, [cmd], { stdio: "ignore" });
   return res.status === 0;
 }
 
@@ -39,13 +40,21 @@ function openInEditor(filePath) {
     return;
   }
 
-  // Fallback: platform opener
-  const opener =
-    process.platform === "darwin" ? "open" :
-    process.platform === "win32" ? "start" :
-    "xdg-open";
+  if (process.platform === "darwin") {
+    spawn("open", [filePath], { stdio: "inherit" });
+    return;
+  }
 
-  spawn(opener, [filePath], { stdio: "inherit", shell: process.platform === "win32" });
+  if (process.platform === "linux") {
+    spawn("xdg-open", [filePath], { stdio: "inherit" });
+    return;
+  }
+
+  if (process.platform === "win32") {
+    // start is a cmd.exe builtin; call cmd explicitly (no shell:true)
+    spawn("cmd.exe", ["/c", "start", '""', filePath], { stdio: "inherit" });
+    return;
+  }
 }
 
 export default {
