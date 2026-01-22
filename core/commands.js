@@ -33,7 +33,7 @@ async function loadCommandsDir(commands, commandsDir) {
   }
 }
 
-async function loadModules(commands, modulesDir) {
+async function loadModules(commands, modulesDir, modulesLoaded) {
   if (!fs.existsSync(modulesDir)) return;
 
   const moduleNames = fs
@@ -59,7 +59,7 @@ async function loadModules(commands, modulesDir) {
       console.warn(`[examen] module '${name}' did not return an array of commands (skipping)`);
       continue;
     }
-
+    modulesLoaded.push(name);
     for (const cmd of moduleCommands) {
       addCommand(commands, cmd, `modules/${name}`);
     }
@@ -72,13 +72,14 @@ export async function loadCommands(state) {
   const modulesDir = path.join(root, "modules");
 
   const commands = {};
+  const modulesLoaded = [];
 
   // Load core commands first
   await loadCommandsDir(commands, commandsDir);
 
   // Load modules after
-  await loadModules(commands, modulesDir);
+  await loadModules(commands, modulesDir, modulesLoaded);
 
-  const ctx = { state, commands };
+  const ctx = { state, commands, modulesLoaded };
   return { commands, ctx };
 }
