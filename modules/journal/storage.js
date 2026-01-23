@@ -33,3 +33,7 @@ export function readEntries() {
 export function getJournalPaths() {
   return { JOURNAL_DIR, JOURNAL_FILE };
 }
+export function getLogPaths() {
+  ensureDir();
+  return { LOG_FILE, DATA_DIR };
+}
